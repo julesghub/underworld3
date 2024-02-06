@@ -8,21 +8,24 @@
     <link rel="shortcut icon" href="./favicon.ico" />
     <link rel="stylesheet" href="./dist/reset.css" />
     <link rel="stylesheet" href="./dist/reveal.css" />
-    <link rel="stylesheet" href="/_assets/css/anu.css" id="theme" />
+    <link rel="stylesheet" href="./_assets/css/anu.css" id="theme" />
     <link rel="stylesheet" href="./css/highlight/base16/zenburn.css" />
 
 
   </head>
   <body>
     <div class="reveal">
-      <div class="slides"><section  data-markdown><script type="text/template">
+      <div class="slides">
+        <section data-markdown data-separator="<--o-->" data-separator-vertical="<--v-->">
+          <textarea data-template>
+            
 
 # Slides
 
 - Louis Moresi
 - Australian National University
 
-</script></section><section  data-markdown><script type="text/template">
+<--o-->
 
 ## Slide 2
 
@@ -38,7 +41,7 @@ classes that can be used directly without too much bother:
 <img class="r-stretch" data-src="images/LithosphereThickness.png">
 ```
 
-</script></section><section  data-markdown><script type="text/template">
+<--o-->
 
 ## Slide 3
 
@@ -50,7 +53,7 @@ Animations / styling work using `reveal.js` classes
 <p class="fragment fade-in-then-out">Fade in, then out</p>
 <p class="fragment fade-up">Slide up while fading in</p>
 
-</script></section><section  data-markdown><script type="text/template">
+<--o-->
 
 ## Slide 4 Math
 
@@ -60,7 +63,7 @@ $$ e^{i\pi} + 1 = 0$$
 
 With inline available ($e^{i\pi} = -1$) as well
 
-</script></section><section  data-markdown><script type="text/template">
+<--o-->
 
 ## Slide 5 Vertical slides
 
@@ -68,7 +71,7 @@ Reveal has vertical sub-stacks that you can divert through
 
  - Vertical stack 1
 
-</script></section><section  data-markdown><script type="text/template">
+<--o-->
 
 ## Slide 5.1 Vertical slides
 
@@ -77,7 +80,7 @@ Reveal has vertical sub-stacks that you can divert through
 
  - Vertical stack 2
 
-</script></section><section  data-markdown><script type="text/template">
+<--o-->
 
 ## Slide 5.2 Vertical slides
 
@@ -85,8 +88,11 @@ Reveal has vertical sub-stacks that you can divert through
 
 ![Earth](images/LithosphereThickness.png) <!-- .element height="50%" width="50%" -->
 
-</script></section><section  data-markdown><script type="text/template">
-</script></section></div>
+<--o-->
+
+          </textarea>
+        </section>
+      </div>
     </div>
 
     <script src="./dist/reveal.js"></script>
@@ -130,7 +136,7 @@ Reveal has vertical sub-stacks that you can divert through
       // options from URL query string
       var queryOptions = Reveal().getQueryHash() || {};
 
-      var options = extend(defaultOptions, {"width":1100,"height":750,"margin":0.07}, queryOptions);
+      var options = extend(defaultOptions, {"width":1100,"height":750,"margin":0.07,"_":[],"static":"static_slides/slideshows","theme":"css/anu.css","glob":"**/*.reveal.md","separator":"<--o-->","vertical-separator":"<--v-->","verticalSeparator":"<--v-->","static-dirs":"movies,images","staticDirs":"movies,images"}, queryOptions);
     </script>
 
 
