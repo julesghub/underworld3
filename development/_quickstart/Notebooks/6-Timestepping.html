@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.8.26">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Notebook 6: Time-dependence – Underworld3 Quick Start Guide</title>
+<title>Notebook 6: Rayleigh-Bénard Convection (time-stepping example) – Underworld3 Quick Start Guide</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -58,7 +58,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -66,17 +66,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
 <link href="../Notebooks/7-Unsteady_Flow.html" rel="next">
-<link href="../Notebooks/5-Solvers.html" rel="prev">
+<link href="../Notebooks/5-Solvers-ii-Stokes.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-6c22da3f700b1fd0acc9b46213ed99c5.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-b59b60cd35b8d468ed850b0327c1ebaf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -104,7 +105,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
 
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
@@ -122,7 +123,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -162,7 +163,7 @@ window.Quarto = {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title"><span class="chapter-title">Notebook 6: Time-dependence</span></h1>
+          <h1 class="quarto-secondary-nav-title"><span class="chapter-title">Notebook 6: Rayleigh-Bénard Convection (time-stepping example)</span></h1>
         </a>     
     </div>
   </nav>
@@ -173,7 +174,8 @@ window.Quarto = {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
       <a href="../index.html" class="sidebar-logo-link">
-      <img src="../media/MansoursNightmare.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      <img src="../media/MansoursNightmare.png" alt="" class="sidebar-logo light-content py-0 d-lg-inline d-none">
+      <img src="../media/MansoursNightmare.png" alt="" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
       </a>
       </div>
     <div class="sidebar-menu-container"> 
@@ -235,17 +237,17 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../Notebooks/4-Solvers.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Notebook 4: Poisson Equation</span></a>
+  <a href="../Notebooks/4-Solvers-i-Poisson.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Notebook 4: Poisson Equation</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../Notebooks/5-Solvers.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Notebook 5: Stokes Equation</span></a>
+  <a href="../Notebooks/5-Solvers-ii-Stokes.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Notebook 5: Stokes Equation</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../Notebooks/6-Timestepping.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Notebook 6: Time-dependence</span></a>
+  <a href="../Notebooks/6-Timestepping.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Notebook 6: Rayleigh-Bénard Convection (time-stepping example)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -271,10 +273,13 @@ window.Quarto = {
    
   <ul>
   <li><a href="#create-linked-solvers" id="toc-create-linked-solvers" class="nav-link active" data-scroll-target="#create-linked-solvers">Create linked solvers</a></li>
-  <li><a href="#curved-free-slip-boundaries" id="toc-curved-free-slip-boundaries" class="nav-link" data-scroll-target="#curved-free-slip-boundaries">Curved free-slip boundaries</a></li>
+  <li><a href="#curved-free-slip-boundaries" id="toc-curved-free-slip-boundaries" class="nav-link" data-scroll-target="#curved-free-slip-boundaries">Curved, free-slip boundaries</a></li>
   <li><a href="#initial-condition" id="toc-initial-condition" class="nav-link" data-scroll-target="#initial-condition">Initial condition</a></li>
   <li><a href="#exercise---null-space" id="toc-exercise---null-space" class="nav-link" data-scroll-target="#exercise---null-space">Exercise - Null space</a></li>
-  <li><a href="#exercise---heat-flux" id="toc-exercise---heat-flux" class="nav-link" data-scroll-target="#exercise---heat-flux">Exercise - Heat flux</a></li>
+  <li><a href="#exercise---heat-flux" id="toc-exercise---heat-flux" class="nav-link" data-scroll-target="#exercise---heat-flux">Exercise - Heat flux</a>
+  <ul class="collapse">
+  <li><a href="#references-2" id="toc-references-2" class="nav-link" data-scroll-target="#references-2">References</a></li>
+  </ul></li>
   </ul>
 <div class="quarto-other-links"><h2>Other Links</h2><ul><li><a href="https://github.com/underworldcode/underworld3"><i class="bi bi-github"></i>Github Repository</a></li><li><a href="https://www.underworlcode.org"><i class="bi bi-newspaper"></i>Underworld3 Blog</a></li></ul></div><div class="quarto-code-links"><h2>Code Links</h2><ul><li><a href="https://mybinder.org/v2/gh/underworld-community/uw3-demo-launcher/HEAD?labpath=underworld3%2Fdocs%2Fuser%2FNotebooks%2FNotebook_Index.ipynb"><i class="bi bi-rocket-takeoff"></i>Open in Binder</a></li></ul></div></nav>
     </div>
@@ -283,7 +288,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-title">Notebook 6: Time-dependence</span></h1>
+<h1 class="title d-none d-lg-block"><span class="chapter-title">Notebook 6: Rayleigh-Bénard Convection (time-stepping example)</span></h1>
 </div>
 
 
@@ -301,45 +306,56 @@ window.Quarto = {
 
 
 <div style="float: right; width: 40%">
-<img src="media/AnnulusConvectionModel.png" width="100%">
-
-<i> Convection solution in an annulus with fixed inner, outer temperatures and free slip boundaries For details, see the notebook code. </i>
-
+<p><img src="media/AnnulusConvectionModel.png" class="img-fluid"></p>
 </div>
-<p>We’ll look at a convection problem which couples Stokes Flow with time-dependent advection/diffusion.</p>
-<p>The starting point is our previous notebook where we solved for Stokes flow in a cylindrical annulus geometry. We then add an advection-diffusion solver to evolve temperature. The Stokes buoyancy force is proportional to the temperature anomaly, and the velocity solution is fed back into the temperature advection term.</p>
-<div id="dddf1a25-1d89-4c39-90dc-9ca5a45db5dd" class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> underworld3 <span class="im">as</span> uw</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sympy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>We’ll look at a convection problem which couples Stokes Flow with time-dependent advection/diffusion to give simple Rayleigh-Bénard convection model.</p>
+<p><span class="math display">\[
+-\nabla \cdot
+    \left[
+            \frac{\eta}{2}\left( \nabla \mathbf{u} + \nabla \mathbf{u}^T \right) -  p \mathbf{I} \right] =
+     -\rho_0 \alpha T \mathbf{g}
+\]</span> <span class="math display">\[
+\nabla \cdot \mathbf{u} = 0
+\]</span></p>
+<p><span class="math inline">\(\eta\)</span> is viscosity, <span class="math inline">\(p\)</span> is pressure, <span class="math inline">\(\rho_0\)</span> is a reference density, <span class="math inline">\(\alpha\)</span> is thermal expansivity, and <span class="math inline">\(T\)</span> is the temperature. Here we explicitly express density variations in terms of temperature variations.</p>
+<p>Thermal evolution is given by <span class="math display">\[
+\frac{\partial T}{\partial t} - \mathbf{u}\cdot\nabla T = \kappa \nabla^2 T
+\]</span> where the velocity, <span class="math inline">\(\mathbf{u}\)</span> is the result of the Stokes flow calculation. <span class="math inline">\(\kappa\)</span> is the thermal diffusivity (compare this with Notebook 4).</p>
+<p>The starting point is our previous notebook where we solved for Stokes flow in a cylindrical annulus geometry. We then add an advection-diffusion solver to evolve temperature. The Stokes buoyancy force is proportional to the temperature anomaly, and the velocity solution is fed back into the temperature advection term. The timestepping loop is written by hand because usually you will want to do some analysis or output some checkpoints.</p>
+<p>To read more about the applications of simple mantle convection models like this one, see (for example) Schubert et al, 2001.</p>
+<div id="dddf1a25-1d89-4c39-90dc-9ca5a45db5dd" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sympy</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> underworld3 <span class="im">as</span> uw</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="d17b5f9b-d00e-43c2-ba10-b9a8920aa3be" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>res <span class="op">=</span> <span class="dv">10</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>res <span class="op">=</span> <span class="dv">10</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>r_o <span class="op">=</span> <span class="fl">1.0</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>r_i <span class="op">=</span> <span class="fl">0.55</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>rayleigh_number <span class="op">=</span> <span class="fl">3.0e4</span></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>meshball <span class="op">=</span> uw.meshing.Annulus(radiusOuter<span class="op">=</span>r_o, </span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>                              radiusInner<span class="op">=</span>r_i, </span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>                              cellSize<span class="op">=</span><span class="dv">1</span><span class="op">/</span>res,</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>                              qdegree<span class="op">=</span><span class="dv">3</span>,</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>                             )</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Coordinate directions etc</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>x, y <span class="op">=</span> meshball.CoordinateSystem.X</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>r, th <span class="op">=</span> meshball.CoordinateSystem.xR</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>unit_rvec <span class="op">=</span> meshball.CoordinateSystem.unit_e_0</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Orientation of surface normals</span></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>Gamma_N <span class="op">=</span> unit_rvec</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>meshball <span class="op">=</span> uw.meshing.Annulus(</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    radiusOuter<span class="op">=</span>r_o,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    radiusInner<span class="op">=</span>r_i,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    cellSize<span class="op">=</span><span class="dv">1</span> <span class="op">/</span> res,</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    qdegree<span class="op">=</span><span class="dv">3</span>,</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Coordinate directions etc</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>x, y <span class="op">=</span> meshball.CoordinateSystem.X</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>r, th <span class="op">=</span> meshball.CoordinateSystem.xR</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>unit_rvec <span class="op">=</span> meshball.CoordinateSystem.unit_e_0</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Orientation of surface normals</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>Gamma_N <span class="op">=</span> unit_rvec</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="377301f7-9596-4216-917f-fc5dca474c0d" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Mesh variables for the unknowns</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Mesh variables for the unknowns</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>v_soln <span class="op">=</span> uw.discretisation.MeshVariable(<span class="st">"V0"</span>, meshball, <span class="dv">2</span>, degree<span class="op">=</span><span class="dv">2</span>, varsymbol<span class="op">=</span><span class="vs">r"{v_0}"</span>)</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>p_soln <span class="op">=</span> uw.discretisation.MeshVariable(<span class="st">"p"</span>, meshball, <span class="dv">1</span>, degree<span class="op">=</span><span class="dv">1</span>, continuous<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>t_soln <span class="op">=</span> uw.discretisation.MeshVariable(<span class="st">"T"</span>, meshball, <span class="dv">1</span>, degree<span class="op">=</span><span class="dv">3</span>, continuous<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>t_soln <span class="op">=</span> uw.discretisation.MeshVariable(<span class="st">"T"</span>, meshball, <span class="dv">1</span>, degree<span class="op">=</span><span class="dv">3</span>, continuous<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="create-linked-solvers" class="level3">
 <h3 class="anchored" data-anchor-id="create-linked-solvers">Create linked solvers</h3>
@@ -347,29 +363,30 @@ window.Quarto = {
 <p>The advection-diffusion solver evolved <code>t_soln</code> using the Stokes velocity <code>v_soln</code> in the fluid-transport term.</p>
 </section>
 <section id="curved-free-slip-boundaries" class="level3">
-<h3 class="anchored" data-anchor-id="curved-free-slip-boundaries">Curved free-slip boundaries</h3>
+<h3 class="anchored">Curved, free-slip boundaries</h3>
 <p>In the annulus, a free slip boundary corresponds to zero radial velocity. However, in this mesh, <span class="math inline">\(v_r\)</span> is not one of the unknowns (<span class="math inline">\(\mathbf{v} = (v_x, v_y)\)</span>). We apply a non linear boundary condition that penalises <span class="math inline">\(v_r\)</span> on the boundary as discussed previously in Example 5.</p>
 <div id="3f3c3875-4ba1-4e99-a793-3446af229b6d" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>stokes <span class="op">=</span> uw.systems.Stokes(</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    meshball, velocityField<span class="op">=</span>v_soln, </span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    pressureField<span class="op">=</span>p_soln,</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>stokes.bodyforce <span class="op">=</span> rayleigh_number <span class="op">*</span> t_soln.sym <span class="op">*</span> unit_rvec</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>stokes.constitutive_model <span class="op">=</span> uw.constitutive_models.ViscousFlowModel</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>stokes.constitutive_model.Parameters.shear_viscosity_0 <span class="op">=</span> <span class="dv">1</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>stokes.tolerance <span class="op">=</span> <span class="fl">1.0e-3</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>stokes.petsc_options[<span class="st">"fieldsplit_velocity_mg_coarse_pc_type"</span>] <span class="op">=</span> <span class="st">"svd"</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>stokes.add_natural_bc(<span class="dv">10000</span> <span class="op">*</span> Gamma_N.dot(v_soln.sym) <span class="op">*</span>  Gamma_N, <span class="st">"Upper"</span>)</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> r_i <span class="op">!=</span> <span class="fl">0.0</span>:</span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    stokes.add_natural_bc(<span class="dv">10000</span> <span class="op">*</span> Gamma_N.dot(v_soln.sym) <span class="op">*</span>  Gamma_N, <span class="st">"Lower"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>stokes <span class="op">=</span> uw.systems.Stokes(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    meshball,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    velocityField<span class="op">=</span>v_soln,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    pressureField<span class="op">=</span>p_soln,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>stokes.bodyforce <span class="op">=</span> rayleigh_number <span class="op">*</span> t_soln.sym <span class="op">*</span> unit_rvec</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>stokes.constitutive_model <span class="op">=</span> uw.constitutive_models.ViscousFlowModel</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>stokes.constitutive_model.Parameters.shear_viscosity_0 <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>stokes.tolerance <span class="op">=</span> <span class="fl">1.0e-3</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>stokes.petsc_options[<span class="st">"fieldsplit_velocity_mg_coarse_pc_type"</span>] <span class="op">=</span> <span class="st">"svd"</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>stokes.add_natural_bc(<span class="dv">1000000</span> <span class="op">*</span> Gamma_N.dot(v_soln.sym) <span class="op">*</span> Gamma_N, <span class="st">"Upper"</span>)</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> r_i <span class="op">!=</span> <span class="fl">0.0</span>:</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    stokes.add_natural_bc(<span class="dv">1000000</span> <span class="op">*</span> Gamma_N.dot(v_soln.sym) <span class="op">*</span> Gamma_N, <span class="st">"Lower"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="61f1c083-ce57-420c-87ee-32a0c546e40f" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create solver for the energy equation (Advection-Diffusion of temperature)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create solver for the energy equation (Advection-Diffusion of temperature)</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>adv_diff <span class="op">=</span> uw.systems.AdvDiffusion(</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    meshball,</span>
@@ -385,145 +402,508 @@ window.Quarto = {
 <span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co">## Boundary conditions for this solver</span></span>
 <span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>adv_diff.add_dirichlet_bc(<span class="op">+</span><span class="fl">1.0</span>, <span class="st">"Lower"</span>)</span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>adv_diff.add_dirichlet_bc(<span class="op">-</span><span class="fl">0.0</span>, <span class="st">"Upper"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>adv_diff.add_dirichlet_bc(<span class="op">-</span><span class="fl">0.0</span>, <span class="st">"Upper"</span>)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>adv_diff.petsc_options.setValue(<span class="st">"snes_rtol"</span>, <span class="fl">0.001</span>)</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>adv_diff.petsc_options.setValue(<span class="st">"ksp_rtol"</span>, <span class="fl">0.0001</span>)</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>adv_diff.petsc_options.setValue(<span class="st">"snes_monitor"</span>, <span class="va">None</span>)</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>adv_diff.petsc_options.setValue(<span class="st">"ksp_monitor"</span>, <span class="va">None</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="6b97dabb-27b1-4682-982e-6536eeef6652" class="cell" data-scrolled="true" data-execution_count="27">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>uw.systems.AdvDiffusion.view()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="advection-diffusion-equation-solver-scalar-variable" class="level1 cell-output cell-output-display cell-output-markdown">
+<h1>Advection-Diffusion Equation Solver (Scalar Variable)</h1>
+<p>This class provides a solver for the scalar Advection-Diffusion equation using the characteristics based Semi-Lagrange Crank-Nicholson method which is described in Spiegelman &amp; Katz, (2006).</p>
+<p><span class="math display">\[
+\color{Green}{\underbrace{ \Bigl[ \frac{\partial u}{\partial t} + \left( \mathbf{v} \cdot \nabla \right) u \Bigr]}_{\dot{\mathbf{u}}}} -
+\nabla \cdot
+        \color{Blue}{\underbrace{\Bigl[ \boldsymbol\kappa \nabla u \Bigr]}_{\mathbf{F}}} =
+        \color{Maroon}{\underbrace{\Bigl[ f \Bigl] }_{\mathbf{h}}}
+\]</span></p>
+<p>The term <span class="math inline">\(\mathbf{F}\)</span> relates diffusive fluxes to gradients in the unknown <span class="math inline">\(u\)</span>. The advective flux that results from having gradients along the direction of transport (given by the velocity vector field <span class="math inline">\(\mathbf{v}\)</span> ) are included in the <span class="math inline">\(\dot{\mathbf{u}}\)</span> term.</p>
+<p>The term <span class="math inline">\(\dot{\mathbf{u}}\)</span> involves upstream sampling to find the value <span class="math inline">\(u^*\)</span> which represents the value of <span class="math inline">\(u\)</span> at the points which later arrive at the nodal points of the mesh. This is achieved using a “hidden” swarm variable which is advected backwards from the nodal points automatically during the <code>solve</code> phase.</p>
+<section id="properties" class="level2">
+<h2 class="anchored" data-anchor-id="properties">Properties</h2>
+<ul>
+<li><p>The unknown is <span class="math inline">\(u\)</span>.</p></li>
+<li><p>The velocity field is <span class="math inline">\(\mathbf{v}\)</span> and is provided as a <code>sympy</code> function to allow operations such as time-averaging to be calculated in situ (e.g.&nbsp;<code>V_Field = v_solution.sym</code>) <strong>NOTE: no it’s not. Currently it is a MeshVariable</strong> this is the desired behaviour though.</p></li>
+<li><p>The diffusivity tensor, <span class="math inline">\(\kappa\)</span> is provided by setting the <code>constitutive_model</code> property to one of the scalar <code>uw.constitutive_models</code> classes and populating the parameters. It is usually a constant or a function of position / time and may also be non-linear or anisotropic.</p></li>
+<li><p>Volumetric sources of <span class="math inline">\(u\)</span> are specified using the <span class="math inline">\(f\)</span> property and can be any valid combination of <code>sympy</code> functions of position and <code>meshVariable</code> or <code>swarmVariable</code> types.</p></li>
+</ul>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+<p>Spiegelman, M., &amp; Katz, R. F. (2006). A semi-Lagrangian Crank-Nicolson algorithm for the numerical solution of advection-diffusion problems. Geochemistry, Geophysics, Geosystems, 7(4). https://doi.org/10.1029/2005GC001073</p>
+</section>
+</section>
+</div>
+<div id="ea889c84-5fae-48e7-b761-afdec4f2c4e2" class="cell" data-execution_count="31">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>uw.systems.SemiLagragian_DDt.view()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p>Nodal-Swarm Lagrangian History Manager: This manages the update of a Lagrangian variable, <span class="math inline">\(\psi\)</span> on the swarm across timesteps. <span class="math display">\[\quad \psi_p^{t-n\Delta t} \leftarrow \psi_p^{t-(n-1)\Delta t}\quad\]</span> <span class="math display">\[\quad \psi_p^{t-(n-1)\Delta t} \leftarrow \psi_p^{t-(n-2)\Delta t} \cdots\quad\]</span> <span class="math display">\[\quad \psi_p^{t-\Delta t} \leftarrow \psi_p^{t}\]</span></p>
+</div>
 </div>
 <section id="underworld-expressions" class="level4">
 <h4 class="anchored" data-anchor-id="underworld-expressions">Underworld expressions</h4>
-<p>Note that</p>
-<div id="1ddd1c6e-0847-4add-af60-032f039c2315" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>display(<span class="bu">type</span>(stokes.constitutive_model.Parameters.shear_viscosity_0))</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>display(<span class="bu">type</span>(adv_diff.constitutive_model.Parameters.diffusivity))</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>stokes.constitutive_model.Parameters.shear_viscosity_0.sym</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Note that the parameters in the consititutive models are defined as <code>uw.expression</code>s because 1. We generally would like to display them symbolically in equations rather than see their floating point value 2. They can represent complex expressions that “blow up” the symbolic forms when we inspect the equations 3. We would like to be able to substitute new values in the equations and use the <em>lazy evaluation</em> of expressions to avoid having to redefine expressions in multiple locations where these symbols appear 4. For future reference, in optimisation problems, we differentiate expressions with respect to their parameters and want the results also to be evaluated in a lazy fashion.</p>
+<div id="1ddd1c6e-0847-4add-af60-032f039c2315" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>display(<span class="bu">type</span>(stokes.constitutive_model.Parameters.shear_viscosity_0))</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>display(<span class="bu">type</span>(adv_diff.constitutive_model.Parameters.diffusivity))</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>stokes.constitutive_model.Parameters.shear_viscosity_0.sym</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <pre><code>underworld3.function.expressions.UWexpression</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <pre><code>underworld3.function.expressions.UWexpression</code></pre>
 </div>
-<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="7">
+<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="8">
 <p><span class="math inline">\(\displaystyle 1\)</span></p>
 </div>
 </div>
 </section>
 </section>
 <section id="initial-condition" class="level3">
-<h3 class="anchored" data-anchor-id="initial-condition">Initial condition</h3>
+<h3 class="anchored">Initial condition</h3>
 <p>We need to set an initial condition for the temperature field as the coupled system is an initial value problem. Choose whatever works but remember that the boundary conditions will over-rule values you set on the lower and upper boundaries.</p>
-<div id="366ce888-c27a-4a30-bca0-ad406ccaa34c" class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Initial temperature</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>init_t <span class="op">=</span> <span class="fl">0.1</span> <span class="op">*</span> sympy.sin(<span class="dv">3</span> <span class="op">*</span> th) <span class="op">*</span> sympy.cos(np.pi <span class="op">*</span> (r <span class="op">-</span> r_i) <span class="op">/</span> (r_o <span class="op">-</span> r_i)) <span class="op">+</span> (</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    r_o <span class="op">-</span> r</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>) <span class="op">/</span> (r_o <span class="op">-</span> r_i)</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> meshball.access(t_soln):</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    t_soln.data[:,<span class="dv">0</span>] <span class="op">=</span> uw.function.evaluate(init_t, t_soln.coords)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="366ce888-c27a-4a30-bca0-ad406ccaa34c" class="cell" data-execution_count="18">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Initial temperature</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>init_t <span class="op">=</span> <span class="fl">0.1</span> <span class="op">*</span> sympy.sin(<span class="dv">3</span> <span class="op">*</span> th) <span class="op">*</span> sympy.cos(np.pi <span class="op">*</span> (r <span class="op">-</span> r_i) <span class="op">/</span> (r_o <span class="op">-</span> r_i)) <span class="op">+</span> (</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    r_o <span class="op">-</span> r</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>) <span class="op">/</span> (r_o <span class="op">-</span> r_i)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> meshball.access(t_soln):</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    t_soln.data[:, <span class="dv">0</span>] <span class="op">=</span> uw.function.evaluate(init_t, t_soln.coords)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="initial-velocity-solve" class="level4">
-<h4 class="anchored" data-anchor-id="initial-velocity-solve">Initial velocity solve</h4>
+<h4 class="anchored">Initial velocity solve</h4>
 <p>The first solve allows us to determine the magnitude of the velocity field and is useful to keep separated to check convergence rates etc.</p>
 <p>For non-linear problems, we usually need an initial guess using a reasonably close linear problem.</p>
 <p><code>zero_init_guess</code> is used to reset any information in the vector of unknowns (i.e.&nbsp;do not use any initial information if <code>zero_init_guess==True</code>).</p>
-<div id="51f82885-0b41-4454-9953-ac7ea23e38e3" class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>stokes.solve(zero_init_guess<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="51f82885-0b41-4454-9953-ac7ea23e38e3" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>stokes.solve(zero_init_guess<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="1c660972-f858-43bc-a6c4-5e09cc8f9fdf" class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Keep the initialisation separate</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># so we can run the loop again in a notebook</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>max_steps <span class="op">=</span> <span class="dv">50</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>timestep <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>elapsed_time <span class="op">=</span> <span class="fl">0.0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="1c660972-f858-43bc-a6c4-5e09cc8f9fdf" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Keep the initialisation separate</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co"># so we can run the loop again in a notebook</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>max_steps <span class="op">=</span> <span class="dv">15</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>timestep <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>elapsed_time <span class="op">=</span> <span class="fl">0.0</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="2993d3aa-6355-408b-ab60-cf80aebbf0cb" class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>adv_diff.solve(timestep<span class="op">=</span><span class="fl">0.1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="fba03f7d-0f61-4047-96ef-834442e42793" class="cell" data-execution_count="26">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>adv_diff.view(class_documentation<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="advection-diffusion-equation-solver-scalar-variable-1" class="level1 cell-output cell-output-display cell-output-markdown">
+<h1>Advection-Diffusion Equation Solver (Scalar Variable)</h1>
+<p>This class provides a solver for the scalar Advection-Diffusion equation using the characteristics based Semi-Lagrange Crank-Nicholson method which is described in Spiegelman &amp; Katz, (2006).</p>
+<p><span class="math display">\[
+\color{Green}{\underbrace{ \Bigl[ \frac{\partial u}{\partial t} + \left( \mathbf{v} \cdot \nabla \right) u \Bigr]}_{\dot{\mathbf{u}}}} -
+\nabla \cdot
+        \color{Blue}{\underbrace{\Bigl[ \boldsymbol\kappa \nabla u \Bigr]}_{\mathbf{F}}} =
+        \color{Maroon}{\underbrace{\Bigl[ f \Bigl] }_{\mathbf{h}}}
+\]</span></p>
+<p>The term <span class="math inline">\(\mathbf{F}\)</span> relates diffusive fluxes to gradients in the unknown <span class="math inline">\(u\)</span>. The advective flux that results from having gradients along the direction of transport (given by the velocity vector field <span class="math inline">\(\mathbf{v}\)</span> ) are included in the <span class="math inline">\(\dot{\mathbf{u}}\)</span> term.</p>
+<p>The term <span class="math inline">\(\dot{\mathbf{u}}\)</span> involves upstream sampling to find the value <span class="math inline">\(u^*\)</span> which represents the value of <span class="math inline">\(u\)</span> at the points which later arrive at the nodal points of the mesh. This is achieved using a “hidden” swarm variable which is advected backwards from the nodal points automatically during the <code>solve</code> phase.</p>
+<section id="properties-1" class="level2">
+<h2 class="anchored" data-anchor-id="properties-1">Properties</h2>
+<ul>
+<li><p>The unknown is <span class="math inline">\(u\)</span>.</p></li>
+<li><p>The velocity field is <span class="math inline">\(\mathbf{v}\)</span> and is provided as a <code>sympy</code> function to allow operations such as time-averaging to be calculated in situ (e.g.&nbsp;<code>V_Field = v_solution.sym</code>) <strong>NOTE: no it’s not. Currently it is a MeshVariable</strong> this is the desired behaviour though.</p></li>
+<li><p>The diffusivity tensor, <span class="math inline">\(\kappa\)</span> is provided by setting the <code>constitutive_model</code> property to one of the scalar <code>uw.constitutive_models</code> classes and populating the parameters. It is usually a constant or a function of position / time and may also be non-linear or anisotropic.</p></li>
+<li><p>Volumetric sources of <span class="math inline">\(u\)</span> are specified using the <span class="math inline">\(f\)</span> property and can be any valid combination of <code>sympy</code> functions of position and <code>meshVariable</code> or <code>swarmVariable</code> types.</p></li>
+</ul>
+</section>
+<section id="references-1" class="level2">
+<h2 class="anchored" data-anchor-id="references-1">References</h2>
+<p>Spiegelman, M., &amp; Katz, R. F. (2006). A semi-Lagrangian Crank-Nicolson algorithm for the numerical solution of advection-diffusion problems. Geochemistry, Geophysics, Geosystems, 7(4). https://doi.org/10.1029/2005GC001073</p>
+</section>
+</section>
+<div class="cell-output cell-output-display cell-output-markdown">
+<hr>
 </div>
-<div id="8db49d4c-9dcd-4920-901a-65cf8d0056db" class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Null space ?</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> step <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, max_steps):</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    stokes.solve(zero_init_guess<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    delta_t <span class="op">=</span> adv_diff.estimate_dt() </span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    adv_diff.solve(timestep<span class="op">=</span>delta_t)</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    timestep <span class="op">+=</span> <span class="dv">1</span></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    elapsed_time <span class="op">+=</span> delta_t</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> timestep<span class="op">%</span><span class="dv">5</span> <span class="op">==</span> <span class="dv">0</span>:</span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Timestep: </span><span class="sc">{</span>timestep<span class="sc">}</span><span class="ss">, time </span><span class="sc">{</span>elapsed_time<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><strong>Class</strong>: &lt;class ‘underworld3.systems.solvers.SNES_AdvectionDiffusion’&gt;</p>
+</div>
+<section id="underworld-petsc-general-scalar-equation-solver" class="level1 cell-output cell-output-display cell-output-markdown">
+<h1>Underworld / PETSc General Scalar Equation Solver</h1>
+</section>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p>Primary problem:</p>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>&lt;IPython.core.display.Latex object&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p>$ = 0 $</p>
+</div>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><em>Where:</em></p>
+</div>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><span class="math inline">\(\quad\)</span><span class="math inline">\(\displaystyle \upkappa\)</span><span class="math inline">\(=\)</span><span class="math inline">\(\displaystyle 1\)</span></p>
+</div>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><span class="math inline">\(\quad\)</span><span class="math inline">\(\displaystyle \Delta t\)</span><span class="math inline">\(=\)</span><span class="math inline">\(\displaystyle 0.00192729179220545\)</span></p>
+</div>
+<section id="boundary-conditions" class="level1 cell-output cell-output-display cell-output-markdown">
+<h1>Boundary Conditions</h1>
+</section>
+<div class="cell-output cell-output-display cell-output-markdown">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 58%">
+<col style="width: 18%">
+<col style="width: 23%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Type</th>
+<th>Boundary</th>
+<th>Expression</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>essential</strong></td>
+<td>Lower</td>
+<td>$$</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>essential</strong></td>
+<td>Upper</td>
+<td>$$</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p>This solver is formulated as a 2 dimensional problem with a 2 dimensional mesh</p>
+</div>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p>$ = $ <span class="math inline">\(\displaystyle \left[\begin{matrix}{ \hspace{ 0.04pt } {T} }(\mathbf{x})\end{matrix}\right]\)</span></p>
+</div>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p>$ = $ <span class="math inline">\(\displaystyle \left[\begin{matrix}{ \hspace{ 0.04pt } {{v_0}} }_{ 0 }(\mathbf{x}) &amp; { \hspace{ 0.04pt } {{v_0}} }_{ 1 }(\mathbf{x})\end{matrix}\right]\)</span></p>
+</div>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p>$t = $ <span class="math inline">\(\displaystyle \Delta t\)</span></p>
+</div>
+</div>
+<div id="4a334648-c328-42bf-b71f-383246cebdc9" class="cell" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>init_t <span class="op">=</span> <span class="fl">0.1</span> <span class="op">*</span> sympy.sin(<span class="dv">3</span> <span class="op">*</span> th) <span class="op">*</span> sympy.cos(np.pi <span class="op">*</span> (r <span class="op">-</span> r_i) <span class="op">/</span> (r_o <span class="op">-</span> r_i)) <span class="op">+</span> (</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    r_o <span class="op">-</span> r</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>) <span class="op">/</span> (r_o <span class="op">-</span> r_i)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> meshball.access(t_soln):</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    t_soln.data[:, <span class="dv">0</span>] <span class="op">=</span> uw.function.evaluate(</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>        init_t <span class="op">+</span> <span class="fl">0.0001</span> <span class="op">*</span> t_soln.sym[<span class="dv">0</span>], adv_diff.DuDt.psi_star[<span class="dv">0</span>].coords</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="d973fc53-7753-45f4-addb-abc3ef85d35d" class="cell" data-execution_count="13">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>adv_diff.estimate_dt()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<pre><code>0.0015310756944410533</code></pre>
+</div>
+</div>
+<div id="2993d3aa-6355-408b-ab60-cf80aebbf0cb" class="cell" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>adv_diff.solve(timestep<span class="op">=</span><span class="fl">0.01</span>, zero_init_guess<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Timestep: 5, time 0.007655378472205266
-Timestep: 10, time 0.01387213547299994
-Timestep: 15, time 0.017197945909787137
-Timestep: 20, time 0.019855789890665786
-Timestep: 25, time 0.02250450167934171
-Timestep: 30, time 0.02546333347384266
-Timestep: 35, time 0.028720014807997008
-Timestep: 40, time 0.032113891988035236
-Timestep: 45, time 0.035501720967277196
-Timestep: 50, time 0.038852418750145654</code></pre>
+<pre><code>  0 SNES Function norm 9.477337251545e+00
+    Residual norms for Solver_14_ solve.
+    0 KSP Residual norm 5.145688853471e+01
+    1 KSP Residual norm 6.664452877949e+00
+    2 KSP Residual norm 1.519834146720e+00
+    3 KSP Residual norm 8.840183259526e-01
+    4 KSP Residual norm 5.301397793504e-01
+    5 KSP Residual norm 2.424966321832e-01
+    6 KSP Residual norm 1.150826566498e-01
+    7 KSP Residual norm 6.172825406475e-02
+    8 KSP Residual norm 3.137375512549e-02
+    9 KSP Residual norm 1.401218686048e-02
+   10 KSP Residual norm 6.780473869117e-03
+   11 KSP Residual norm 3.790531875925e-03
+  1 SNES Function norm 3.383398820327e-03</code></pre>
 </div>
 </div>
-<div id="09e26f46-452e-49ec-8180-103163cc4fc2" class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># visualise it</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> uw.mpi.size <span class="op">==</span> <span class="dv">1</span>:</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="im">import</span> pyvista <span class="im">as</span> pv</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="im">import</span> underworld3.visualisation <span class="im">as</span> vis</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    pvmesh <span class="op">=</span> vis.mesh_to_pv_mesh(meshball)</span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    pvmesh.point_data[<span class="st">"P"</span>] <span class="op">=</span> vis.scalar_fn_to_pv_points(pvmesh, p_soln.sym)</span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    pvmesh.point_data[<span class="st">"V"</span>] <span class="op">=</span> vis.vector_fn_to_pv_points(pvmesh, v_soln.sym)</span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    pvmesh.point_data[<span class="st">"T"</span>] <span class="op">=</span> vis.scalar_fn_to_pv_points(pvmesh, t_soln.sym)</span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>    pvmesh_t <span class="op">=</span> vis.meshVariable_to_pv_mesh_object(t_soln)</span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    pvmesh_t.point_data[<span class="st">"T"</span>] <span class="op">=</span> vis.scalar_fn_to_pv_points(pvmesh_t, t_soln.sym)</span>
-<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>    skip <span class="op">=</span> <span class="dv">1</span></span>
-<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>    points <span class="op">=</span> np.zeros((meshball._centroids[::skip].shape[<span class="dv">0</span>], <span class="dv">3</span>))</span>
-<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>    points[:, <span class="dv">0</span>] <span class="op">=</span> meshball._centroids[::skip, <span class="dv">0</span>]</span>
-<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>    points[:, <span class="dv">1</span>] <span class="op">=</span> meshball._centroids[::skip, <span class="dv">1</span>]</span>
-<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>    point_cloud <span class="op">=</span> pv.PolyData(points)</span>
-<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>    pvstream <span class="op">=</span> pvmesh.streamlines_from_source(</span>
-<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>        point_cloud, vectors<span class="op">=</span><span class="st">"V"</span>, </span>
-<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>        integration_direction<span class="op">=</span><span class="st">"both"</span>, </span>
-<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>        integrator_type<span class="op">=</span><span class="dv">45</span>,</span>
-<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>        surface_streamlines<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>        initial_step_length<span class="op">=</span><span class="fl">0.01</span>,</span>
-<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>        max_time<span class="op">=</span><span class="fl">1.0</span>,</span>
-<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a>        max_steps<span class="op">=</span><span class="dv">500</span>, </span>
-<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a>   </span>
-<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a>    pl <span class="op">=</span> pv.Plotter(window_size<span class="op">=</span>(<span class="dv">750</span>, <span class="dv">750</span>))</span>
-<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a>    pl.add_mesh(</span>
-<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a>        pvmesh_t,</span>
-<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a>        cmap<span class="op">=</span><span class="st">"RdBu_r"</span>,</span>
-<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a>        edge_color<span class="op">=</span><span class="st">"Grey"</span>,</span>
-<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a>        edge_opacity<span class="op">=</span><span class="fl">0.33</span>,</span>
-<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a>        scalars<span class="op">=</span><span class="st">"T"</span>,</span>
-<span id="cb15-42"><a href="#cb15-42" aria-hidden="true" tabindex="-1"></a>        show_edges<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cb15-43"><a href="#cb15-43" aria-hidden="true" tabindex="-1"></a>        use_transparency<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb15-44"><a href="#cb15-44" aria-hidden="true" tabindex="-1"></a>        opacity<span class="op">=</span><span class="fl">1.0</span>,</span>
-<span id="cb15-45"><a href="#cb15-45" aria-hidden="true" tabindex="-1"></a>        show_scalar_bar<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb15-46"><a href="#cb15-46" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb15-47"><a href="#cb15-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-48"><a href="#cb15-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-49"><a href="#cb15-49" aria-hidden="true" tabindex="-1"></a>    pl.add_mesh(pvstream, opacity<span class="op">=</span><span class="fl">0.3</span>, show_scalar_bar<span class="op">=</span><span class="va">False</span>, cmap<span class="op">=</span><span class="st">"Greens"</span>, render_lines_as_tubes<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb15-50"><a href="#cb15-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-51"><a href="#cb15-51" aria-hidden="true" tabindex="-1"></a>    pl.export_html(<span class="st">"html5/annulus_convection_plot.html"</span>)</span>
-<span id="cb15-52"><a href="#cb15-52" aria-hidden="true" tabindex="-1"></a>    <span class="co"># pl.show(cpos="xy", jupyter_backend="trame")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="8db49d4c-9dcd-4920-901a-65cf8d0056db" class="cell" data-execution_count="23">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Null space ?</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> step <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, max_steps):</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    stokes.solve(zero_init_guess<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    delta_t <span class="op">=</span> <span class="dv">5</span> <span class="op">*</span> adv_diff.estimate_dt()</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    adv_diff.solve(timestep<span class="op">=</span>delta_t, zero_init_guess<span class="op">=</span><span class="va">False</span>, verbose<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>    timestep <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>    elapsed_time <span class="op">+=</span> delta_t</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> timestep <span class="op">%</span> <span class="dv">5</span> <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Timestep: </span><span class="sc">{</span>timestep<span class="sc">}</span><span class="ss">, time </span><span class="sc">{</span>elapsed_time<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  0 SNES Function norm 5.519719545520e-01
+    Residual norms for Solver_14_ solve.
+    0 KSP Residual norm 1.080481897680e+00
+    1 KSP Residual norm 2.794759495722e-01
+    2 KSP Residual norm 8.738937475137e-02
+    3 KSP Residual norm 2.538497096191e-02
+    4 KSP Residual norm 9.791736400409e-03
+    5 KSP Residual norm 3.712676600336e-03
+    6 KSP Residual norm 1.063757340521e-03
+    7 KSP Residual norm 4.172823722413e-04
+    8 KSP Residual norm 1.562544824097e-04
+    9 KSP Residual norm 5.223214632822e-05
+  1 SNES Function norm 4.882999045393e-05
+  0 SNES Function norm 4.773557354896e-01
+    Residual norms for Solver_14_ solve.
+    0 KSP Residual norm 9.317588273285e-01
+    1 KSP Residual norm 2.459336490176e-01
+    2 KSP Residual norm 7.783642668213e-02
+    3 KSP Residual norm 2.191611878110e-02
+    4 KSP Residual norm 6.968378956074e-03
+    5 KSP Residual norm 3.165364530306e-03
+    6 KSP Residual norm 1.009565335997e-03
+    7 KSP Residual norm 4.012564067190e-04
+    8 KSP Residual norm 1.480223863671e-04
+    9 KSP Residual norm 5.045767013406e-05
+  1 SNES Function norm 4.665072060480e-05
+  0 SNES Function norm 4.134346531441e-01
+    Residual norms for Solver_14_ solve.
+    0 KSP Residual norm 8.307659270725e-01
+    1 KSP Residual norm 2.259694308441e-01
+    2 KSP Residual norm 6.843626200604e-02
+    3 KSP Residual norm 2.044900509918e-02
+    4 KSP Residual norm 7.902904914890e-03
+    5 KSP Residual norm 3.123583935771e-03
+    6 KSP Residual norm 9.710014509369e-04
+    7 KSP Residual norm 4.067866782756e-04
+    8 KSP Residual norm 1.440315988629e-04
+    9 KSP Residual norm 4.828499765245e-05
+  1 SNES Function norm 4.388299556922e-05
+  0 SNES Function norm 3.702917051432e-01
+    Residual norms for Solver_14_ solve.
+    0 KSP Residual norm 7.391018432834e-01
+    1 KSP Residual norm 2.118225742668e-01
+    2 KSP Residual norm 6.153300528419e-02
+    3 KSP Residual norm 1.888671986332e-02
+    4 KSP Residual norm 7.688485116852e-03
+    5 KSP Residual norm 2.892614443447e-03
+    6 KSP Residual norm 9.899961279690e-04
+    7 KSP Residual norm 4.303831257914e-04
+    8 KSP Residual norm 1.400355896622e-04
+    9 KSP Residual norm 4.622207543067e-05
+  1 SNES Function norm 4.202452224287e-05
+  0 SNES Function norm 3.315890905574e-01
+    Residual norms for Solver_14_ solve.
+    0 KSP Residual norm 6.598577757155e-01
+    1 KSP Residual norm 1.933887338875e-01
+    2 KSP Residual norm 5.456342813682e-02
+    3 KSP Residual norm 1.650324248410e-02
+    4 KSP Residual norm 6.568305659431e-03
+    5 KSP Residual norm 2.510214143805e-03
+    6 KSP Residual norm 8.758541569735e-04
+    7 KSP Residual norm 3.932827467617e-04
+    8 KSP Residual norm 1.269075769185e-04
+    9 KSP Residual norm 4.140260482029e-05
+  1 SNES Function norm 3.796231562527e-05
+Timestep: 35, time 0.11813280083141166
+  0 SNES Function norm 2.960859596617e-01
+    Residual norms for Solver_14_ solve.
+    0 KSP Residual norm 5.869188962370e-01
+    1 KSP Residual norm 1.726402385232e-01
+    2 KSP Residual norm 4.810609894045e-02
+    3 KSP Residual norm 1.599606132489e-02
+    4 KSP Residual norm 6.662165427614e-03
+    5 KSP Residual norm 2.357922152146e-03
+    6 KSP Residual norm 8.726421811308e-04
+    7 KSP Residual norm 3.684349989627e-04
+    8 KSP Residual norm 1.156301902495e-04
+    9 KSP Residual norm 3.679909417202e-05
+  1 SNES Function norm 3.370864114565e-05
+  0 SNES Function norm 2.635627796534e-01
+    Residual norms for Solver_14_ solve.
+    0 KSP Residual norm 5.258120790880e-01
+    1 KSP Residual norm 1.546764180521e-01
+    2 KSP Residual norm 4.243034265403e-02
+    3 KSP Residual norm 1.387021411069e-02
+    4 KSP Residual norm 5.708313168922e-03
+    5 KSP Residual norm 2.062686684951e-03
+    6 KSP Residual norm 7.701770867568e-04
+    7 KSP Residual norm 3.260237474077e-04
+    8 KSP Residual norm 1.016927787321e-04
+    9 KSP Residual norm 3.305441847160e-05
+  1 SNES Function norm 3.021711111259e-05
+  0 SNES Function norm 2.352577982225e-01
+    Residual norms for Solver_14_ solve.
+    0 KSP Residual norm 4.662224909913e-01
+    1 KSP Residual norm 1.308304571920e-01
+    2 KSP Residual norm 3.675067184174e-02
+    3 KSP Residual norm 1.198851986901e-02
+    4 KSP Residual norm 4.847809939836e-03
+    5 KSP Residual norm 1.779671490862e-03
+    6 KSP Residual norm 6.606400480385e-04
+    7 KSP Residual norm 2.862974583735e-04
+    8 KSP Residual norm 9.092912549642e-05
+    9 KSP Residual norm 2.899026967379e-05
+  1 SNES Function norm 2.618219715153e-05
+  0 SNES Function norm 2.081588556650e-01
+    Residual norms for Solver_14_ solve.
+    0 KSP Residual norm 4.156850990805e-01
+    1 KSP Residual norm 1.156419232977e-01
+    2 KSP Residual norm 3.377209422854e-02
+    3 KSP Residual norm 1.082700216683e-02
+    4 KSP Residual norm 4.371252675824e-03
+    5 KSP Residual norm 1.608015818152e-03
+    6 KSP Residual norm 5.939159194124e-04
+    7 KSP Residual norm 2.567259407852e-04
+    8 KSP Residual norm 8.090958515797e-05
+    9 KSP Residual norm 2.659498917271e-05
+  1 SNES Function norm 2.387613974330e-05
+  0 SNES Function norm 1.937539199874e-01
+    Residual norms for Solver_14_ solve.
+    0 KSP Residual norm 3.660019450414e-01
+    1 KSP Residual norm 1.012449593721e-01
+    2 KSP Residual norm 3.016900019735e-02
+    3 KSP Residual norm 9.957951093233e-03
+    4 KSP Residual norm 4.027053391943e-03
+    5 KSP Residual norm 1.469370028478e-03
+    6 KSP Residual norm 5.396240668210e-04
+    7 KSP Residual norm 2.271461084950e-04
+    8 KSP Residual norm 7.402569637476e-05
+    9 KSP Residual norm 2.413015212591e-05
+  1 SNES Function norm 2.192774200228e-05
+Timestep: 40, time 0.12751568320252216
+  0 SNES Function norm 1.713140082480e-01
+    Residual norms for Solver_14_ solve.
+    0 KSP Residual norm 3.275014386494e-01
+    1 KSP Residual norm 8.737078444362e-02
+    2 KSP Residual norm 2.687213724804e-02
+    3 KSP Residual norm 8.787664223367e-03
+    4 KSP Residual norm 3.617192856344e-03
+    5 KSP Residual norm 1.260833952669e-03
+    6 KSP Residual norm 4.757542865847e-04
+    7 KSP Residual norm 1.966100827069e-04
+    8 KSP Residual norm 6.042671590804e-05
+    9 KSP Residual norm 2.060145655779e-05
+  1 SNES Function norm 1.819100561225e-05
+  0 SNES Function norm 1.542271929937e-01
+    Residual norms for Solver_14_ solve.
+    0 KSP Residual norm 2.899407647694e-01
+    1 KSP Residual norm 7.762840966403e-02
+    2 KSP Residual norm 2.439377336038e-02
+    3 KSP Residual norm 7.951245333685e-03
+    4 KSP Residual norm 3.189174885852e-03
+    5 KSP Residual norm 1.154055078067e-03
+    6 KSP Residual norm 4.241741342927e-04
+    7 KSP Residual norm 1.754189293112e-04
+    8 KSP Residual norm 5.778549679325e-05
+    9 KSP Residual norm 1.899498942539e-05
+  1 SNES Function norm 1.737169503945e-05
+  0 SNES Function norm 1.419356276144e-01
+    Residual norms for Solver_14_ solve.
+    0 KSP Residual norm 2.554491464883e-01
+    1 KSP Residual norm 6.657500094726e-02
+    2 KSP Residual norm 2.163952973113e-02
+    3 KSP Residual norm 6.743714153776e-03
+    4 KSP Residual norm 2.666299041981e-03
+    5 KSP Residual norm 9.953902746315e-04
+    6 KSP Residual norm 3.544054919803e-04
+    7 KSP Residual norm 1.514579514466e-04
+    8 KSP Residual norm 4.900847694450e-05
+    9 KSP Residual norm 1.629677497697e-05
+  1 SNES Function norm 1.500239684453e-05
+  0 SNES Function norm 1.339450298705e-01
+    Residual norms for Solver_14_ solve.
+    0 KSP Residual norm 2.297263165696e-01
+    1 KSP Residual norm 6.048620647282e-02
+    2 KSP Residual norm 1.829847460780e-02
+    3 KSP Residual norm 5.775775135479e-03
+    4 KSP Residual norm 2.326081913902e-03
+    5 KSP Residual norm 8.641079797396e-04
+    6 KSP Residual norm 2.994387291383e-04
+    7 KSP Residual norm 1.301834057094e-04
+    8 KSP Residual norm 4.126632667759e-05
+    9 KSP Residual norm 1.454615633928e-05
+  1 SNES Function norm 1.300527300911e-05
+  0 SNES Function norm 1.285053937370e-01
+    Residual norms for Solver_14_ solve.
+    0 KSP Residual norm 2.010217455509e-01
+    1 KSP Residual norm 5.449025846566e-02
+    2 KSP Residual norm 1.679258699499e-02
+    3 KSP Residual norm 5.166940355687e-03
+    4 KSP Residual norm 2.134667802719e-03
+    5 KSP Residual norm 8.189528924733e-04
+    6 KSP Residual norm 2.897842345078e-04
+    7 KSP Residual norm 1.233878285600e-04
+    8 KSP Residual norm 3.991892988938e-05
+    9 KSP Residual norm 1.354400026959e-05
+  1 SNES Function norm 1.235867453176e-05
+Timestep: 45, time 0.13708032282577876</code></pre>
 </div>
-<div id="3775ea27-4d60-4675-a1cc-a9ba016b5d73" class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> IFrame</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>IFrame(src<span class="op">=</span><span class="st">"html5/annulus_convection_plot.html"</span>, width<span class="op">=</span><span class="dv">500</span>, height<span class="op">=</span><span class="dv">400</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="14">
+</div>
+<div id="09e26f46-452e-49ec-8180-103163cc4fc2" class="cell" data-execution_count="21">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># visualise it</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> uw.mpi.size <span class="op">==</span> <span class="dv">1</span>:</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    <span class="im">import</span> pyvista <span class="im">as</span> pv</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    <span class="im">import</span> underworld3.visualisation <span class="im">as</span> vis</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>    pvmesh <span class="op">=</span> vis.mesh_to_pv_mesh(meshball)</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>    pvmesh.point_data[<span class="st">"P"</span>] <span class="op">=</span> vis.scalar_fn_to_pv_points(pvmesh, p_soln.sym)</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>    pvmesh.point_data[<span class="st">"V"</span>] <span class="op">=</span> vis.vector_fn_to_pv_points(pvmesh, v_soln.sym)</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>    pvmesh.point_data[<span class="st">"T"</span>] <span class="op">=</span> vis.scalar_fn_to_pv_points(pvmesh, t_soln.sym)</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>    pvmesh_t <span class="op">=</span> vis.meshVariable_to_pv_mesh_object(t_soln)</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>    pvmesh_t.point_data[<span class="st">"T"</span>] <span class="op">=</span> vis.scalar_fn_to_pv_points(pvmesh_t, t_soln.sym)</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>    skip <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>    points <span class="op">=</span> np.zeros((meshball._centroids[::skip].shape[<span class="dv">0</span>], <span class="dv">3</span>))</span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>    points[:, <span class="dv">0</span>] <span class="op">=</span> meshball._centroids[::skip, <span class="dv">0</span>]</span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>    points[:, <span class="dv">1</span>] <span class="op">=</span> meshball._centroids[::skip, <span class="dv">1</span>]</span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>    point_cloud <span class="op">=</span> pv.PolyData(points)</span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>    pvstream <span class="op">=</span> pvmesh.streamlines_from_source(</span>
+<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>        point_cloud,</span>
+<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a>        vectors<span class="op">=</span><span class="st">"V"</span>,</span>
+<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a>        integration_direction<span class="op">=</span><span class="st">"both"</span>,</span>
+<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a>        integrator_type<span class="op">=</span><span class="dv">45</span>,</span>
+<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a>        surface_streamlines<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a>        initial_step_length<span class="op">=</span><span class="fl">0.01</span>,</span>
+<span id="cb23-29"><a href="#cb23-29" aria-hidden="true" tabindex="-1"></a>        max_time<span class="op">=</span><span class="fl">1.0</span>,</span>
+<span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a>        max_steps<span class="op">=</span><span class="dv">500</span>,</span>
+<span id="cb23-31"><a href="#cb23-31" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb23-32"><a href="#cb23-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-33"><a href="#cb23-33" aria-hidden="true" tabindex="-1"></a>    pl <span class="op">=</span> pv.Plotter(window_size<span class="op">=</span>(<span class="dv">750</span>, <span class="dv">750</span>))</span>
+<span id="cb23-34"><a href="#cb23-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-35"><a href="#cb23-35" aria-hidden="true" tabindex="-1"></a>    pl.add_mesh(</span>
+<span id="cb23-36"><a href="#cb23-36" aria-hidden="true" tabindex="-1"></a>        pvmesh_t,</span>
+<span id="cb23-37"><a href="#cb23-37" aria-hidden="true" tabindex="-1"></a>        cmap<span class="op">=</span><span class="st">"RdBu_r"</span>,</span>
+<span id="cb23-38"><a href="#cb23-38" aria-hidden="true" tabindex="-1"></a>        edge_color<span class="op">=</span><span class="st">"Grey"</span>,</span>
+<span id="cb23-39"><a href="#cb23-39" aria-hidden="true" tabindex="-1"></a>        edge_opacity<span class="op">=</span><span class="fl">0.33</span>,</span>
+<span id="cb23-40"><a href="#cb23-40" aria-hidden="true" tabindex="-1"></a>        scalars<span class="op">=</span><span class="st">"T"</span>,</span>
+<span id="cb23-41"><a href="#cb23-41" aria-hidden="true" tabindex="-1"></a>        show_edges<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb23-42"><a href="#cb23-42" aria-hidden="true" tabindex="-1"></a>        use_transparency<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb23-43"><a href="#cb23-43" aria-hidden="true" tabindex="-1"></a>        opacity<span class="op">=</span><span class="fl">1.0</span>,</span>
+<span id="cb23-44"><a href="#cb23-44" aria-hidden="true" tabindex="-1"></a>        show_scalar_bar<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb23-45"><a href="#cb23-45" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb23-46"><a href="#cb23-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-47"><a href="#cb23-47" aria-hidden="true" tabindex="-1"></a>    pl.add_mesh(</span>
+<span id="cb23-48"><a href="#cb23-48" aria-hidden="true" tabindex="-1"></a>        pvstream,</span>
+<span id="cb23-49"><a href="#cb23-49" aria-hidden="true" tabindex="-1"></a>        opacity<span class="op">=</span><span class="fl">0.33</span>,</span>
+<span id="cb23-50"><a href="#cb23-50" aria-hidden="true" tabindex="-1"></a>        show_scalar_bar<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb23-51"><a href="#cb23-51" aria-hidden="true" tabindex="-1"></a>        cmap<span class="op">=</span><span class="st">"Greens"</span>,</span>
+<span id="cb23-52"><a href="#cb23-52" aria-hidden="true" tabindex="-1"></a>        render_lines_as_tubes<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb23-53"><a href="#cb23-53" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb23-54"><a href="#cb23-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-55"><a href="#cb23-55" aria-hidden="true" tabindex="-1"></a>    pl.export_html(<span class="st">"html5/annulus_convection_plot.html"</span>)</span>
+<span id="cb23-56"><a href="#cb23-56" aria-hidden="true" tabindex="-1"></a>    <span class="co"># pl.show(cpos="xy", jupyter_backend="trame")</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="3775ea27-4d60-4675-a1cc-a9ba016b5d73" class="cell" data-execution_count="22">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> IFrame</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>IFrame(src<span class="op">=</span><span class="st">"html5/annulus_convection_plot.html"</span>, width<span class="op">=</span><span class="dv">500</span>, height<span class="op">=</span><span class="dv">400</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="22">
 
         <iframe width="500" height="400" src="html5/annulus_convection_plot.html" frameborder="0" allowfullscreen=""></iframe>
         
@@ -535,8 +915,8 @@ Timestep: 50, time 0.038852418750145654</code></pre>
 <section id="exercise---null-space" class="level2">
 <h2 class="anchored" data-anchor-id="exercise---null-space">Exercise - Null space</h2>
 <p>Based on our previous notebook, can you see how to calculate and (if necessary) remove rigid-body the rotation null-space from the solution ?</p>
-<p>The use of a coarse-level singular-value decomposition for the velocity solver should help, in this case, but it’s wise to check anyway.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>    stokes.petsc_options[<span class="st">"fieldsplit_velocity_mg_coarse_pc_type"</span>] <span class="op">=</span> <span class="st">"svd"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The use of a coarse-level singular-value decomposition for the velocity solver should help, in this case, but sometimes you can see that there is a rigid body rotation (look at the streamlines). It’s wise to check and quantify the presence of the null space.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>    stokes.petsc_options[<span class="st">"fieldsplit_velocity_mg_coarse_pc_type"</span>] <span class="op">=</span> <span class="st">"svd"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="exercise---heat-flux" class="level2">
 <h2 class="anchored" data-anchor-id="exercise---heat-flux">Exercise - Heat flux</h2>
@@ -545,10 +925,14 @@ Timestep: 50, time 0.038852418750145654</code></pre>
 <p><span class="math display">\[
     Q_\textrm{surf} = \nabla T \cdot \hat{r} + T (\mathbf{v} \cdot \hat{r} )
 \]</span></p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>    Q_surf <span class="op">=</span> <span class="op">-</span>meshball.vector.gradient(t_soln.sym).dot(unit_rvec) <span class="op">+\</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>                    t_soln.sym[<span class="dv">0</span>] <span class="op">*</span> v_soln.sym.dot(unit_rvec)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>    Q_surf <span class="op">=</span> <span class="op">-</span>meshball.vector.gradient(t_soln.sym).dot(unit_rvec) <span class="op">+\</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>                    t_soln.sym[<span class="dv">0</span>] <span class="op">*</span> v_soln.sym.dot(unit_rvec)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="references-2" class="level3">
+<h3 class="anchored" data-anchor-id="references-2">References</h3>
+<p>Schubert, G., Turcotte, D. L., &amp; Olson, P. (2001). Mantle Convection in the Earth and Planets (1st ed.). Cambridge University Press. https://doi.org/10.1017/CBO9780511612879</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -603,13 +987,14 @@ Timestep: 50, time 0.038852418750145654</code></pre>
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -953,7 +1338,7 @@ Timestep: 50, time 0.038852418750145654</code></pre>
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../Notebooks/5-Solvers.html" class="pagination-link" aria-label="Notebook 5: Stokes Equation">
+      <a href="../Notebooks/5-Solvers-ii-Stokes.html" class="pagination-link" aria-label="Notebook 5: Stokes Equation">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Notebook 5: Stokes Equation</span></span>
       </a>          
   </div>

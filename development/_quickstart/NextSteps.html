@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.8.26">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -69,14 +69,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="./index.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-6c22da3f700b1fd0acc9b46213ed99c5.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-b59b60cd35b8d468ed850b0327c1ebaf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -105,6 +106,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -141,7 +171,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
       <a href="./index.html" class="sidebar-logo-link">
-      <img src="./media/MansoursNightmare.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      <img src="./media/MansoursNightmare.png" alt="" class="sidebar-logo light-content py-0 d-lg-inline d-none">
+      <img src="./media/MansoursNightmare.png" alt="" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
       </a>
       </div>
     <div class="sidebar-menu-container"> 
@@ -203,17 +234,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Notebooks/4-Solvers.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Notebook 4: Poisson Equation</span></a>
+  <a href="./Notebooks/4-Solvers-i-Poisson.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Notebook 4: Poisson Equation</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Notebooks/5-Solvers.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Notebook 5: Stokes Equation</span></a>
+  <a href="./Notebooks/5-Solvers-ii-Stokes.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Notebook 5: Stokes Equation</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Notebooks/6-Timestepping.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Notebook 6: Time-dependence</span></a>
+  <a href="./Notebooks/6-Timestepping.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Notebook 6: Rayleigh-Bénard Convection (time-stepping example)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -279,7 +310,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>In addition to the notebooks in this brief set of examples, there are a number of sources of information on using <code>Underworld3</code> that you can access:</p>
 <ul>
 <li><p><a href="https://www.underworldcode.org">The Underworld Website / Blog</a></p></li>
-<li><p><a href="https://underworldcode.github.io/underworld3/main_api/underworld3/index.html">The API documentation</a> (all the modules and functions and their full sets of arguments) is automatically generated from the source code and uses the same rich markdown content as the notebook help text. There is also a set of <a href="https://underworldcode.github.io/underworld3/development_api/underworld3/index.html">API docs</a> for the development branch.</p></li>
+<li><p><a href="https://underworldcode.github.io/underworld3/main_api/underworld3/index.html">The API documentation</a> (all the modules and functions and their full sets of arguments) is automatically generated from the source code and uses the same rich markdown content as the notebook help text.</p></li>
+<li><p><a href="https://underworldcode.github.io/underworld3/development_api/underworld3/index.html">The API documentation (development branch)</a></p></li>
 <li><p>The <a href="https://github.com/underworldcode/underworld3"><code>underworld3</code> GitHub repository</a> is the most active development community for the code.</p></li>
 </ul>
 </section>
@@ -296,8 +328,33 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><code>Underworld3</code> is inherently parallel and designed for high performance computing. The symbolic layer is a relatively thin veneer that sits on top of the <code>PETSc</code> machinery. A script that has been developed in <code>jupyter</code> should be transferrable to an HPC environment with no changes (except that inherently serial operations such as visualisation and model reduction are best left to postprocessing / co-processing).</p>
 <p>We recommend installing <code>jupytext</code> which allows either a seamless two-way conversion (or pairing) between the <code>ipynb</code> format and an annotated python script, or the ability to work entirely with annoted python scripts and not use <code>ipynb</code> at all. The python form does not store the output of notebook cells but there are advantages to this when scripts are under version control.</p>
 <p>Almost all of our notebook examples are annotated python for this reason.An exception is the collection of notebooks in this quick-start guide because we want to show you the rendered output in the static web pages.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>    <span class="ex">mpirun</span> <span class="at">-np</span> 1024 python3 Modelling_Script.py <span class="at">-uw_resolution</span> 96</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>    <span class="ex">mpirun</span> <span class="at">-np</span> 1024 python3 Modelling_Script.py <span class="at">-uw_resolution</span> 96</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The main difference between the notebook development environment and HPC is the lack of interactivity, particularly in sending parameters to the script at launch time. Typically, we expect the HPC version to be running at much higher resolution, or for many more timesteps than the development notebook. We use the <code>PETSc</code> command line parsing machinery to generate notebooks that also can ingest run-time parameters from a script (as above).</p>
+<section id="parallel-scaling-performance" class="level4">
+<h4 class="anchored" data-anchor-id="parallel-scaling-performance">Parallel scaling / performance</h4>
+<p>Running geodynamic models on a single CPU/processor (i.e.&nbsp;serial) is time-consuming and limits us to low resolution. Underworld is build from the ground-up as a parallel computing solution which means we can easily run large models on high performance computing clusters (HPC); that is, sub-divide the problem into many smaller chunks and use multiple processors to solve each one, taking care to combine and synchronise the answers from each processor to obtain the correct solution to the original problem.</p>
+<p>Parallel computation can reduce time we need to wait for the our results to be computed but it does happen at the expense of some overhead The overhead does depend on the nature of the computer we are using but typically we need to think about:</p>
+<ul>
+<li><p><strong>Code complexity</strong>: any time we manage computations across different processors, we have additional coding to reassemble the calculations correctly and we need to think about many special cases. For example, integrating a quantity of the surface of a mesh: many processes contribute, some do not, the results have to be computed independently then combined.</p></li>
+<li><p><strong>Additional memory is often required</strong>: to manage copies of information that lives on / near boundaries, to store the topology of the decomposed domain and to help navigate the passing of information between processes.</p></li>
+<li><p><strong>The time taken to synchronise results</strong> and the work required to keep track of who is doing what, when they are done, and in making sure everyone waits for everyone else. There is a time-cost in actually sending information as part of a synchronisation and a computational cost in ensuring that work is distributed efficiently.</p></li>
+</ul>
+<p>To determine the efficiency of parallel computation, we introduce the <em>strong scaling test</em> which measures the time taken to solve a problem in parallel compared to the same problem solved in serial. In strong scaling tests, the size of the problem is kept constant, while the number of processors is increased. The reduction in run-time due to the addition of more processors is commonly expressed in terms of the speed-up:</p>
+<p><span class="math display">\[
+\textrm{speed up} = \frac{t(N_{ref})}{t(N)}
+\]</span></p>
+<p>where <span class="math inline">\(t(N_{ref})\)</span> is the run-time for a reference number of processors, <span class="math inline">\(N_{ref}\)</span>, and <span class="math inline">\(t(N)\)</span> is the run-time when <span class="math inline">\(N\)</span> processors are used. In the ideal case, <span class="math inline">\(N\)</span> additional processors should contribute all of its resources in solving the problem and reduce the compute time by a factor of <span class="math inline">\(N\)</span> relative to the reference run time. For example, using <span class="math inline">\(2 N_{ref}\)</span> processors will ideally halve the run-time resulting to a speed-up = 2.</p>
+<div id="fig-strong-scaling" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-strong-scaling-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="media/UW3-StrongScalingSolvers.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-strong-scaling-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.1: Strong parallel-scaling tests run on Australia’s peak computing system, <a href="https://nci.org.au/our-systems/hpc-systems?ref=underworldcode.org">GADI, at the National Computational Infrastructure</a>. This is a typical High Performance Computing facility with large numbers of dedicated, identical CPUs and fast communication links.
+</figcaption>
+</figure>
+</div>
+</section>
 </section>
 <section id="advanced-capabilities" class="level3">
 <h3 class="anchored" data-anchor-id="advanced-capabilities">Advanced capabilities</h3>
@@ -327,11 +384,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h4 class="anchored" data-anchor-id="mesh-adaptation">Mesh Adaptation</h4>
 <p>It is also possible to use the PETSc mesh adaption capabilities, to refine the resolution of a model where it is most needed and coarsen elsewhere. Dynamically-adapting meshes are possible but the interface is very low level at present, particularly in parallel.</p>
 <center>
-<iframe src="media/pyvista/AdaptedSphere.html" width="600" height="300">
+<iframe src="media/pyvista/AdaptedSphere.html" width="600" height="500">
 </iframe>
 </center>
-<p><em>Live Image: Static mesh adaptation to the slope of a field. The driving buoyancy term is three plume-like upwellings and the slope of this field is shown in colour (red high, blue low). The adapted mesh is shown in green.</em></p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
+<p><em>Live Image: Static mesh adaptation to the slope of a field. The driving buoyancy term is a plume-like upwelling and the slope of this field is shown in colour (red high, blue low). Don’t forget to zoom in !</em></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># t is the driving "temperature". We form an isotropic refinement metric from its slope</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    refinement_fn <span class="op">=</span> <span class="fl">1.0</span> <span class="op">+</span> sympy.sqrt(</span>
@@ -340,7 +397,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>        <span class="op">+</span> t.diff(z) <span class="op">**</span> <span class="dv">2</span></span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    icoord, meshA <span class="op">=</span> adaptivity.mesh_adapt_meshVar(mesh0, refinement_fn, Metric, redistribute<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    icoord, meshA <span class="op">=</span> adaptivity.mesh_adapt_meshVar(mesh0, refinement_fn, Metric, redistribute<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 
 
 </section>
@@ -398,13 +455,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
